@@ -20,8 +20,7 @@ A web-based task management tool: register/login with roles (Admin, User), creat
 ├── frontend/           # React + Vite + TypeScript app
 ├── docs/               # architecture, API, database, decisions
 ├── scripts/            # verify + SonarQube scripts (Git Bash & PowerShell)
-├── docker-compose.yml  # local SQL Server
-└── sonar-project.properties
+└── docker-compose.yml  # local SQL Server
 ```
 
 See [docs/architecture.md](docs/architecture.md) for the layering details.
@@ -67,8 +66,8 @@ docker compose up -d
 cd backend
 dotnet test TaskManagement.sln
 
-# Frontend
-cd frontend
+# Frontend (from backend/, go up one level first)
+cd ../frontend
 npm run test
 ```
 
@@ -96,7 +95,7 @@ scripts/run-sonar.sh
 scripts/run-sonar.ps1
 ```
 
-This runs `dotnet-sonarscanner begin` -> backend build/test with coverage -> `dotnet-sonarscanner end`, then a frontend coverage run. Coverage reports: backend coverlet `opencover` XML under `backend/tests/**/coverage.opencover.xml`, frontend Vitest `lcov` at `frontend/coverage/lcov.info` - both paths are wired into `sonar-project.properties`, which also lists the analysis exclusions (migrations, generated files, `bin/`/`obj/`/`node_modules/`/`dist/`).
+This runs `dotnet-sonarscanner begin` -> backend build/test with coverage -> a frontend coverage run -> `dotnet-sonarscanner end`. `dotnet-sonarscanner` does not read `sonar-project.properties`, so there isn't one - every setting (coverage report paths, analysis exclusions for migrations/generated files/`bin`/`obj`/`node_modules`/`dist`) is passed as an explicit `/d:` argument in the `begin` call inside `scripts/run-sonar.sh` / `scripts/run-sonar.ps1`. Coverage reports: backend coverlet `opencover` XML under `backend/tests/**/coverage.opencover.xml`, frontend Vitest `lcov` at `frontend/coverage/lcov.info`.
 
 ## Git Workflow
 

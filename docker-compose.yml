@@ -6,7 +6,7 @@ services:
       ACCEPT_EULA: ${ACCEPT_EULA}
       MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
     ports:
-      - "${MSSQL_PORT}:1433"
+      - "127.0.0.1:${MSSQL_PORT}:1433"
     volumes:
       - sqlserver-data:/var/opt/mssql
 
