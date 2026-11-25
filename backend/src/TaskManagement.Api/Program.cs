@@ -29,4 +29,11 @@ app.MapControllers();
 
 app.MapGet("/health", () => Results.Ok(new { status = "Healthy" }));
 
-app.Run();
+try
+{
+    app.Run();
+}
+finally
+{
+    Log.CloseAndFlush();
+}
