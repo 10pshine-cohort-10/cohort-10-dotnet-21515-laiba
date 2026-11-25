@@ -88,7 +88,7 @@ scripts/verify.ps1
 
 ## Code Quality (SonarQube)
 
-Prerequisites: a reachable SonarQube/SonarCloud server, the `dotnet-sonarscanner` global tool installed, and a `SONAR_TOKEN` environment variable set (never hardcoded; optionally `SONAR_HOST_URL` if not `http://localhost:9000`).
+Prerequisites: a reachable SonarQube/SonarCloud server, a `SONAR_TOKEN` environment variable set (never hardcoded; optionally `SONAR_HOST_URL` if not `http://localhost:9000`), and either the `dotnet-sonarscanner` global tool (backend-only or combined checkouts) or the standalone [Sonar Scanner CLI](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/scanners/sonarscanner/) (`sonar-scanner`, frontend-only checkouts).
 
 ```bash
 # Git Bash
@@ -99,7 +99,12 @@ scripts/run-sonar.sh
 scripts/run-sonar.ps1
 ```
 
-This runs `dotnet-sonarscanner begin` -> backend build/test with coverage -> a frontend coverage run -> `dotnet-sonarscanner end`. As with `scripts/verify.*`, the backend and/or frontend steps are skipped automatically when that part of the repository isn't present yet at the current revision (and the whole run is skipped if neither is present). `dotnet-sonarscanner` does not read `sonar-project.properties`, so there isn't one - every setting (coverage report paths, analysis exclusions for migrations/generated files/`bin`/`obj`/`node_modules`/`dist`) is passed as an explicit `/d:` argument in the `begin` call inside `scripts/run-sonar.sh` / `scripts/run-sonar.ps1`. Coverage reports: backend coverlet `opencover` XML under `backend/tests/**/coverage.opencover.xml`, frontend Vitest `lcov` at `frontend/coverage/lcov.info`.
+The script adapts to what's present at this revision:
+- **Backend-only or combined**: `dotnet-sonarscanner begin` -> backend build/test with coverage -> a frontend coverage run (if `frontend/` is present) -> `dotnet-sonarscanner end`, same as before - `dotnet-sonarscanner` always wraps one real `dotnet build`, so it only runs when `backend/` exists.
+- **Frontend-only** (no `backend/` yet): `dotnet-sonarscanner` is **not** used, since it has no `.NET` build to wrap. The script instead runs the standalone `sonar-scanner` CLI, reusing the same project key/exclusions/token/host settings as `-D` arguments. If `sonar-scanner` isn't installed, that analysis step is skipped with an explicit message rather than silently doing nothing or claiming success.
+- **Neither present**: the whole run is skipped, same as `scripts/verify.*`.
+
+`dotnet-sonarscanner` does not read `sonar-project.properties`, so there isn't one - every setting (coverage report paths, analysis exclusions for migrations/generated files/`bin`/`obj`/`node_modules`/`dist`) is passed as an explicit `/d:` (or, for the standalone scanner, `-D`) argument in `scripts/run-sonar.sh` / `scripts/run-sonar.ps1`. Coverage reports: backend coverlet `opencover` XML under `backend/tests/**/coverage.opencover.xml`, frontend Vitest `lcov` at `frontend/coverage/lcov.info`.
 
 ## Git Workflow
 
