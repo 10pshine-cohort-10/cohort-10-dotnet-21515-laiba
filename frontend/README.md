@@ -1,6 +1,6 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+This template provides a minimal setup to get React working in Vite with HMR and ESLint rules.
 
 Currently, two official plugins are available:
 
@@ -11,22 +11,35 @@ Currently, two official plugins are available:
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the Oxlint configuration
+## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+Linting runs via `npm run lint` (`eslint .`), configured in [`eslint.config.js`](./eslint.config.js). It currently extends `tseslint.configs.recommended` - type-aware lint rules are **not** enabled.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
+If you are developing a production application, we recommend enabling type-aware lint rules by switching to a type-checked config in `eslint.config.js`:
+
+```js
+export default tseslint.config(
+  { ignores: ['dist', 'coverage'] },
+  {
+    extends: [
+      js.configs.recommended,
+      // Replace tseslint.configs.recommended with one of these:
+      ...tseslint.configs.recommendedTypeChecked,
+      // ...tseslint.configs.strictTypeChecked,
+    ],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        project: ['./tsconfig.app.json', './tsconfig.node.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    // ...
   },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+  eslintConfigPrettier,
+)
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+See the [typescript-eslint docs](https://typescript-eslint.io/getting-started/typed-linting/) for details on typed linting.
