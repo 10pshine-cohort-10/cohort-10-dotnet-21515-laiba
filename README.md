@@ -14,10 +14,12 @@ A web-based task management tool: register/login with roles (Admin, User), creat
 
 ## Project Structure
 
+This is the target structure for the project; `backend/` and `frontend/` land in their own follow-up PRs and are not part of this revision yet (see [Roadmap](#roadmap)).
+
 ```
 /
-├── backend/            # ASP.NET Core solution (Domain/Application/Infrastructure/Api + tests)
-├── frontend/           # React + Vite + TypeScript app
+├── backend/            # ASP.NET Core solution (Domain/Application/Infrastructure/Api + tests) - planned, follow-up PR
+├── frontend/           # React + Vite + TypeScript app - planned, follow-up PR
 ├── docs/               # architecture, API, database, decisions
 ├── scripts/            # verify + SonarQube scripts (Git Bash & PowerShell)
 └── docker-compose.yml  # local SQL Server
@@ -33,7 +35,9 @@ See [docs/architecture.md](docs/architecture.md) for the layering details.
 
 ## Getting Started
 
-### Backend
+The steps below describe each part once its PR has landed (see [Roadmap](#roadmap)); they don't all apply at once on a fresh partial checkout.
+
+### Backend _(planned - follow-up PR)_
 
 ```bash
 cd backend
@@ -43,7 +47,7 @@ dotnet run --project src/TaskManagement.Api
 
 The API starts with a `/health` endpoint and OpenAPI document at `/openapi/v1.json`.
 
-### Frontend
+### Frontend _(planned - follow-up PR)_
 
 ```bash
 cd frontend
@@ -71,7 +75,7 @@ cd ../frontend
 npm run test
 ```
 
-Or run everything at once, in order, stopping at the first failure (`dotnet build` -> `dotnet test` -> `npm run lint` -> `npm run test` -> `npm run build`) from the repo root:
+Or run everything at once, in order, stopping at the first failure (`dotnet build` -> `dotnet test` -> `npm run lint` -> `npm run test` -> `npm run build`) from the repo root. Steps are skipped automatically (with a `SKIPPED: ...` line and a summary at the end) when `backend/` or `frontend/` isn't present yet at the current revision.
 
 ```bash
 # Git Bash
@@ -95,7 +99,7 @@ scripts/run-sonar.sh
 scripts/run-sonar.ps1
 ```
 
-This runs `dotnet-sonarscanner begin` -> backend build/test with coverage -> a frontend coverage run -> `dotnet-sonarscanner end`. `dotnet-sonarscanner` does not read `sonar-project.properties`, so there isn't one - every setting (coverage report paths, analysis exclusions for migrations/generated files/`bin`/`obj`/`node_modules`/`dist`) is passed as an explicit `/d:` argument in the `begin` call inside `scripts/run-sonar.sh` / `scripts/run-sonar.ps1`. Coverage reports: backend coverlet `opencover` XML under `backend/tests/**/coverage.opencover.xml`, frontend Vitest `lcov` at `frontend/coverage/lcov.info`.
+This runs `dotnet-sonarscanner begin` -> backend build/test with coverage -> a frontend coverage run -> `dotnet-sonarscanner end`. As with `scripts/verify.*`, the backend and/or frontend steps are skipped automatically when that part of the repository isn't present yet at the current revision (and the whole run is skipped if neither is present). `dotnet-sonarscanner` does not read `sonar-project.properties`, so there isn't one - every setting (coverage report paths, analysis exclusions for migrations/generated files/`bin`/`obj`/`node_modules`/`dist`) is passed as an explicit `/d:` argument in the `begin` call inside `scripts/run-sonar.sh` / `scripts/run-sonar.ps1`. Coverage reports: backend coverlet `opencover` XML under `backend/tests/**/coverage.opencover.xml`, frontend Vitest `lcov` at `frontend/coverage/lcov.info`.
 
 ## Git Workflow
 
@@ -106,7 +110,9 @@ This runs `dotnet-sonarscanner begin` -> backend build/test with coverage -> a f
 
 ## Roadmap
 
-- [x] Phase 0 - project scaffolding, conventions, tooling
+- [x] Phase 0a - repo tooling, scripts, docs, conventions (this PR)
+- [ ] Phase 0b - backend solution scaffolding - planned, follow-up PR
+- [ ] Phase 0c - frontend app scaffolding - planned, follow-up PR
 - [ ] Phase 1 - authentication & roles (register/login, Admin/User)
 - [ ] Phase 2 - task CRUD (priority, categories, due dates, assignment)
 - [ ] Phase 3 - logging & global exception handling
