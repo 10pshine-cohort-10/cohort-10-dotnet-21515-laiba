@@ -1,0 +1,21 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# IDE files
+.vs/
+*.user
+*.suo
+
+# Logs
+[Ll]ogs/
+*.log
+
+# Test output
+TestResults/
+coverage/
+
+# Local environment files
+.env
+.env.*
+!.env.example
