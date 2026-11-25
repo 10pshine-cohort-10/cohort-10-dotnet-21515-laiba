@@ -1,0 +1,42 @@
+/* Design tokens - see .claude/skills/design-system/references/tokens.md
+   Dark is the default (:root); light is opted into via [data-theme="light"].
+   Never use these hex values directly in components - use the Tailwind
+   utilities generated from the @theme block in index.css instead. */
+
+:root {
+  --color-bg: #0e1020;
+  --color-surface: #161a30;
+  --color-surface-2: #1f2440;
+  --color-border: #2a3052;
+  --color-text: #e8eaf6;
+  --color-text-muted: #9aa1c7;
+  --color-primary: #7c5cff;
+  --color-accent: #ffb347;
+  --color-success: #3ddba7;
+  --color-warning: #ffd166;
+  --color-danger: #ff6b6b;
+
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --spacing-unit: 8px;
+  --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --transition-fast: 150ms;
+  --transition-base: 200ms;
+
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+[data-theme='light'] {
+  --color-bg: #f6f7fb;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef0f8;
+  --color-border: #e1e4f0;
+  --color-text: #14172b;
+  --color-text-muted: #5b6285;
+  --color-primary: #6a48f0;
+  --color-accent: #f59e0b;
+  --color-success: #12b886;
+  --color-warning: #f2a900;
+  --color-danger: #e5484d;
+}
