@@ -1,0 +1,34 @@
+# Build output
+bin/
+obj/
+.vs/
+*.user
+dist/
+
+# Logs
+logs/
+*.log
+
+# Test / coverage
+TestResults/
+coverage/
+
+# Node
+node_modules/
+
+# Environment / secrets
+.env
+.env.local
+appsettings.*.local.json
+
+# SonarQube
+.sonarqube/
+.scannerwork/
+
+# Misc
+*.suo
+
+# Claude Code (local tooling)
+.claude/
+CLAUDE.md
+CLAUDE.local.md
